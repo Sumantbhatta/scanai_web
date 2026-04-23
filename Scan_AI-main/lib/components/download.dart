@@ -11,12 +11,16 @@ class DownloadSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 40),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF5A3182), Color(0xFFC659A5)],
+          colors: [
+            Color(0xFF5A3182),
+            Color(0xFFC659A5),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
             "Download Our App",
@@ -29,9 +33,14 @@ class DownloadSection extends StatelessWidget {
           const SizedBox(height: 10),
           const Text(
             "Get access to smart healthcare anytime, anywhere.",
-            style: TextStyle(color: Colors.white70, fontSize: 16),
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 16,
+            ),
           ),
           const SizedBox(height: 40),
+
+          /// ✅ Cards Section (Web Version Removed)
           Wrap(
             spacing: 25,
             runSpacing: 25,
@@ -39,7 +48,6 @@ class DownloadSection extends StatelessWidget {
             children: [
               _buildCard("Android App", Icons.android, context),
               _buildCard("iOS App", Icons.phone_iphone, context),
-              _buildCard("Web Version", Icons.web, context),
             ],
           ),
         ],
@@ -50,7 +58,7 @@ class DownloadSection extends StatelessWidget {
   Widget _buildCard(String title, IconData icon, BuildContext context) {
     return _HoverCard(
       child: Container(
-        width: 250,
+        width: 260, // slightly increased for better balance with 2 cards
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -59,20 +67,36 @@ class DownloadSection extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 50, color: const Color(0xFF5A3182)),
+            Icon(
+              icon,
+              size: 50,
+              color: const Color(0xFF5A3182),
+            ),
             const SizedBox(height: 15),
-            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 15),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF5A3182),
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
               ),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DownloadPage()),
+                  MaterialPageRoute(
+                    builder: (context) => const DownloadPage(),
+                  ),
                 );
               },
               child: const Text("Download"),
@@ -84,15 +108,19 @@ class DownloadSection extends StatelessWidget {
   }
 }
 
+/// 🔥 Hover Effect Widget (2D lift + scale)
 class _HoverCard extends StatefulWidget {
   final Widget child;
+
   const _HoverCard({required this.child});
+
   @override
   State<_HoverCard> createState() => _HoverCardState();
 }
 
 class _HoverCardState extends State<_HoverCard> {
   bool isHovered = false;
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
@@ -100,7 +128,20 @@ class _HoverCardState extends State<_HoverCard> {
       onExit: (_) => setState(() => isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        transform: isHovered ? (Matrix4.identity()..scale(1.05)) : Matrix4.identity(),
+        transform: isHovered
+            ? (Matrix4.identity()..scale(1.05))
+            : Matrix4.identity(),
+        decoration: BoxDecoration(
+          boxShadow: isHovered
+              ? [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  )
+                ]
+              : [],
+        ),
         child: widget.child,
       ),
     );
