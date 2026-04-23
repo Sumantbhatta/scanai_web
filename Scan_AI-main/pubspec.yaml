@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  video_player: ^2.8.1
 
   cupertino_icons: ^1.0.8
 
@@ -29,3 +30,4 @@ flutter:
     - assets/service1.jpg
     - assets/service2.jpg
     - assets/download.jpg
+    - assets/scan_ai_video.mp4

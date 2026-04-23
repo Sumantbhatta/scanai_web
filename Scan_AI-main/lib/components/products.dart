@@ -172,164 +172,155 @@ class productssection extends StatelessWidget {
   }
 
   Widget _productGrid(BuildContext context, List<_ProductModel> products) {
-    return Column(
-      children: products
-          .map(
-            (product) => Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 14),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: _primary.withOpacity(0.12)),
-                ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool isWide = constraints.maxWidth > 860;
+        if (isWide) {
+          final rows = <Widget>[];
+          for (int i = 0; i < products.length; i += 3) {
+            final rowItems =
+                products.sublist(i, (i + 3).clamp(0, products.length));
+            rows.add(
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: rowItems.map((product) {
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 16, bottom: 16),
+                      child: _HoverProductCard(
+                        product: product,
+                        onBuildContent: (ctx) => _productCard(ctx, product),
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
-              child: _productCard(context, product),
-            ),
-          )
-          .toList(),
+            );
+          }
+          return Column(children: rows);
+        } else {
+          return Column(
+            children: products
+                .map((product) => Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _HoverProductCard(
+                        product: product,
+                        onBuildContent: (ctx) => _productCard(ctx, product),
+                      ),
+                    ))
+                .toList(),
+          );
+        }
+      },
     );
   }
 
   Widget _productCard(BuildContext context, _ProductModel product) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final bool isMobile = constraints.maxWidth < 860;
-        final content = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 42,
-              height: 42,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    _secondary.withOpacity(0.85),
-                    _accent.withOpacity(0.85)
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(product.icon, color: Colors.white, size: 22),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                _secondary.withOpacity(0.85),
+                _accent.withOpacity(0.85),
+              ],
             ),
-            const SizedBox(height: 14),
-            Text(
-              product.name,
-              style: const TextStyle(
-                color: _primary,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                height: 1.2,
-              ),
-            ),
-            if (isMobile) ...[
-              const SizedBox(height: 6),
-              Text(
-                product.tagline,
-                style: const TextStyle(
-                  color: _accent,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-            const SizedBox(height: 10),
-            Text(
-              product.description,
-              style: TextStyle(
-                color: Colors.grey.shade700,
-                fontSize: 14,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 12),
-            ...product.features
-                .map(
-                  (feature) => Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.check_circle,
-                            size: 16, color: _accent),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            feature,
-                            style: const TextStyle(
-                              color: _primary,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                )
-                .toList(),
-            if (product.useCases.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              const Text(
-                'Use Cases',
-                style: TextStyle(
-                  color: _primary,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 13,
-                ),
-              ),
-              const SizedBox(height: 6),
-              ...product.useCases
-                  .map(
-                    (useCase) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(product.icon, color: Colors.white, size: 22),
+        ),
+        const SizedBox(height: 14),
+        Text(
+          product.name,
+          style: const TextStyle(
+            color: _primary,
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            height: 1.2,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          product.tagline,
+          style: const TextStyle(
+            color: _accent,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          product.description,
+          style: TextStyle(
+            color: Colors.grey.shade700,
+            fontSize: 14,
+            height: 1.5,
+          ),
+        ),
+        const SizedBox(height: 12),
+        ...product.features
+            .map(
+              (feature) => Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.check_circle, size: 16, color: _accent),
+                    const SizedBox(width: 8),
+                    Expanded(
                       child: Text(
-                        '- $useCase',
-                        style: TextStyle(
-                          color: Colors.grey.shade700,
+                        feature,
+                        style: const TextStyle(
+                          color: _primary,
                           fontSize: 13,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                  )
-                  .toList(),
-            ],
-            const SizedBox(height: 12),
-            _solidButton(
-              context,
-              label: product.cta,
-              compact: true,
-              actionLabel: _routeLabelFromCTA(product.cta),
-            ),
-          ],
-        );
-
-        if (isMobile) {
-          return content;
-        }
-
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(flex: 7, child: content),
-            const SizedBox(width: 24),
-            Expanded(
-              flex: 3,
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Text(
-                  product.tagline,
-                  textAlign: TextAlign.right,
-                  style: const TextStyle(
-                    color: _accent,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  ],
                 ),
               ),
             )
-          ],
-        );
-      },
+            .toList(),
+        if (product.useCases.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          const Text(
+            'Use Cases',
+            style: TextStyle(
+              color: _primary,
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
+            ),
+          ),
+          const SizedBox(height: 6),
+          ...product.useCases
+              .map(
+                (useCase) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text(
+                    '- $useCase',
+                    style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
+        ],
+        const SizedBox(height: 16),
+        _solidButton(
+          context,
+          label: product.cta,
+          compact: true,
+          actionLabel: _routeLabelFromCTA(product.cta),
+        ),
+      ],
     );
   }
 
@@ -552,6 +543,137 @@ class productssection extends StatelessWidget {
       cta: 'Request Demo',
     ),
   ];
+}
+
+class _HoverProductCard extends StatefulWidget {
+  const _HoverProductCard({
+    required this.product,
+    required this.onBuildContent,
+  });
+
+  final _ProductModel product;
+  final Widget Function(BuildContext) onBuildContent;
+
+  @override
+  State<_HoverProductCard> createState() => _HoverProductCardState();
+}
+
+class _HoverProductCardState extends State<_HoverProductCard>
+    with SingleTickerProviderStateMixin {
+  static const Color _primary = Color(0xFF5A3182);
+  static const Color _accent = Color(0xFFE063A3);
+
+  bool _hovered = false;
+  late final AnimationController _controller;
+  late final Animation<double> _elevationAnim;
+  late final Animation<double> _translateAnim;
+  late final Animation<double> _scaleAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _elevationAnim = Tween<double>(begin: 3, end: 18).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+    _translateAnim = Tween<double>(begin: 0, end: -6).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+    _scaleAnim = Tween<double>(begin: 1.0, end: 1.02).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() => _hovered = true);
+        _controller.forward();
+      },
+      onExit: (_) {
+        setState(() => _hovered = false);
+        _controller.reverse();
+      },
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..translate(0.0, _translateAnim.value, 0.0)
+              ..scale(_scaleAnim.value),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: _hovered
+                      ? _accent.withOpacity(0.35)
+                      : _primary.withOpacity(0.09),
+                  width: _hovered ? 1.5 : 1.0,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: _primary.withOpacity(0.08),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                  if (_hovered)
+                    BoxShadow(
+                      color: _primary.withOpacity(0.18),
+                      blurRadius: _elevationAnim.value * 1.5,
+                      spreadRadius: 0,
+                      offset: Offset(0, _elevationAnim.value * 0.6),
+                    ),
+                  if (_hovered)
+                    BoxShadow(
+                      color: _accent.withOpacity(0.10),
+                      blurRadius: _elevationAnim.value,
+                      offset: Offset(4, _elevationAnim.value * 0.4),
+                    ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Animated top accent bar
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      height: 3,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: _hovered
+                              ? [_accent, _primary]
+                              : [Colors.transparent, Colors.transparent],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: widget.onBuildContent(context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
 
 class _ProductModel {

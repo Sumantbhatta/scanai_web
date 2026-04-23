@@ -1,108 +1,108 @@
 import 'package:flutter/material.dart';
 import '../pages/download_page.dart';
 
-class downloadsection extends StatelessWidget {
-  const downloadsection({super.key});
+class DownloadSection extends StatelessWidget {
+  const DownloadSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 40),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            const Color(0xFF5A3182).withOpacity(0.95),
-            const Color(0xFFC659A5).withOpacity(0.95),
-          ],
+          colors: [Color(0xFF5A3182), Color(0xFFC659A5)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          bool isMobile = constraints.maxWidth < 800;
-
-          return isMobile
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: _content(context, isMobile),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: _content(context, isMobile),
-                );
-        },
+      child: Column(
+        children: [
+          const Text(
+            "Download Our App",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 34,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            "Get access to smart healthcare anytime, anywhere.",
+            style: TextStyle(color: Colors.white70, fontSize: 16),
+          ),
+          const SizedBox(height: 40),
+          Wrap(
+            spacing: 25,
+            runSpacing: 25,
+            alignment: WrapAlignment.center,
+            children: [
+              _buildCard("Android App", Icons.android, context),
+              _buildCard("iOS App", Icons.phone_iphone, context),
+              _buildCard("Web Version", Icons.web, context),
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  List<Widget> _content(BuildContext context, bool isMobile) {
-    Widget textSection = Column(
-      crossAxisAlignment:
-          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Download Our App",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 0.5,
-          ),
+  Widget _buildCard(String title, IconData icon, BuildContext context) {
+    return _HoverCard(
+      child: Container(
+        width: 250,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
         ),
-        const SizedBox(height: 12),
-        Text(
-          "Book appointments, track health & get care anytime, anywhere.",
-          textAlign: isMobile ? TextAlign.center : TextAlign.left,
-          style:
-              const TextStyle(color: Colors.white70, fontSize: 15, height: 1.6),
-        ),
-        const SizedBox(height: 24),
-
-        // ✅ FIXED BUTTON
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: const Color(0xFF5A3182),
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
-            ),
-            elevation: 0,
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const DownloadPage(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 50, color: const Color(0xFF5A3182)),
+            const SizedBox(height: 15),
+            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 15),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF5A3182),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
               ),
-            );
-          },
-          child: const Text("Download Now"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DownloadPage()),
+                );
+              },
+              child: const Text("Download"),
+            ),
+          ],
         ),
-      ],
+      ),
     );
+  }
+}
 
-    Widget imageSection = Image.asset(
-      "assets/download.jpg",
-      height: 200,
-      fit: BoxFit.contain,
-      errorBuilder: (context, error, stackTrace) {
-        return const Icon(Icons.image_not_supported,
-            color: Colors.white, size: 80);
-      },
+class _HoverCard extends StatefulWidget {
+  final Widget child;
+  const _HoverCard({required this.child});
+  @override
+  State<_HoverCard> createState() => _HoverCardState();
+}
+
+class _HoverCardState extends State<_HoverCard> {
+  bool isHovered = false;
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        transform: isHovered ? (Matrix4.identity()..scale(1.05)) : Matrix4.identity(),
+        child: widget.child,
+      ),
     );
-
-    return isMobile
-        ? [
-            textSection,
-            const SizedBox(height: 30),
-            imageSection,
-          ]
-        : [
-            Expanded(child: textSection),
-            imageSection,
-          ];
   }
 }
