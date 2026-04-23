@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:scan_ai/components/About.dart';
+import 'package:scan_ai/components/service.dart';
 import '../components/header.dart';
 import '../components/herosection.dart';
 import '../components/footer.dart';
@@ -27,7 +29,8 @@ class HomePage extends StatelessWidget {
 
               // 3. Other Page Content
               const DownloadSection(),
-
+              const services(),
+              const aboutsection(),
               // 4. The Footer
               const footer(),
             ],

@@ -75,13 +75,11 @@ class services extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _menuItem("Free Checkup"),
-          _menuItem("Cardiogram",
+          _menuItem("AI Health Scan"),
+          _menuItem("Smart Diagnosis",
               bgColor: const Color(0xFF5A3182), textColor: Colors.white),
-          _menuItem("X-Ray"),
-          _menuItem("Breast Cancer"),
-          _menuItem("View All",
-              bgColor: const Color(0xFFE063A3), textColor: Colors.white),
+          _menuItem("Medical Reports"),
+          _menuItem("Disease Detection"),
         ],
       ),
     );
@@ -95,7 +93,7 @@ class services extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "A passion for putting patients first.",
+              "AI-powered healthcare designed for accuracy and care.",
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
@@ -107,12 +105,12 @@ class services extends StatelessWidget {
               spacing: 10,
               runSpacing: 10,
               children: [
-                "A Passion for Healing",
-                "5-Star Care",
-                "All our best",
-                "Believe in Us",
-                "A Legacy of Excellence",
-                "Always Caring"
+                "Early Disease Detection",
+                "AI-Powered Analysis",
+                "Fast & Accurate Results",
+                "Secure Medical Data",
+                "User-Friendly Interface",
+                "24/7 Accessibility"
               ]
                   .map((item) => Row(
                         mainAxisSize: MainAxisSize.min,
@@ -136,13 +134,13 @@ class services extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat scelerisque tortor ornare ornare. Convallis felis vitae tortor augue.",
+              "ScanAI leverages advanced artificial intelligence to assist in early detection of diseases, helping users and healthcare professionals make faster and more informed decisions.",
               style:
                   TextStyle(color: Colors.grey[700], fontSize: 14, height: 1.6),
             ),
             const SizedBox(height: 8),
             Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat scelerisque tortor ornare ornare.",
+              "Our platform ensures accuracy, security, and ease of use—making healthcare more accessible and reliable for everyone.",
               style:
                   TextStyle(color: Colors.grey[600], fontSize: 14, height: 1.6),
             ),
@@ -151,7 +149,7 @@ class services extends StatelessWidget {
       ),
     );
 
-    // Right Images
+    // Right Images (unchanged)
     Widget rightImages = Column(
       children: [
         ClipRRect(
