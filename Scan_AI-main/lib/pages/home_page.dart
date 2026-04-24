@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scan_ai/components/About.dart';
 import 'package:scan_ai/components/service.dart';
 import '../components/header.dart';
-import '../components/herosection.dart';
+import '../components/herosection.dart'; // Ensure this filename is correct
 import '../components/footer.dart';
 import '../components/download.dart';
 import '../utils/navigation.dart';
@@ -14,7 +14,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // SafeArea prevents the content from going under the status bar or notch
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -24,13 +23,15 @@ class HomePage extends StatelessWidget {
                 onNavTap: (item) => handleNavbarNavigation(context, item),
               ),
 
-              // 2. The Video Section
-              const herosection(),
+              // 2. The Video Section 
+              // ✅ Removed 'const' because HeroSection has a Video Controller
+              HeroSection(), 
 
               // 3. Other Page Content
               const DownloadSection(),
               const services(),
               const aboutsection(),
+              
               // 4. The Footer
               const footer(),
             ],

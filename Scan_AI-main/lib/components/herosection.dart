@@ -2,28 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import '../utils/navigation.dart'; // ✅ Added import for navigation
 
-class herosection extends StatefulWidget {
-  const herosection({super.key});
+class HeroSection extends StatefulWidget {
+  const HeroSection({super.key});
 
   @override
-  State<herosection> createState() => _herosectionState();
+  State<HeroSection> createState() => _HeroSectionState();
 }
 
-class _herosectionState extends State<herosection> {
+class _HeroSectionState extends State<HeroSection> {
   late VideoPlayerController _controller;
   bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    // ✅ Ensure you renamed the file to scan_ai_video.mp4 in assets
     _controller = VideoPlayerController.asset("assets/scan_ai_video.mp4")
       ..initialize().then((_) {
         _controller.setVolume(0.0);
         _controller.setLooping(true);
         _controller.play();
-        setState(() => _isInitialized = true);
-      }).catchError((e) => debugPrint("Video Error: $e"));
+        if (mounted) {
+          setState(() => _isInitialized = true);
+        }
+      }).catchError((e) {
+        debugPrint("Video Error: $e");
+        return null; // ✅ The magic fix
+      });
   }
 
   @override
@@ -53,9 +57,7 @@ class _herosectionState extends State<herosection> {
                 ),
               ),
             ),
-          
-          Container(color: Colors.black.withOpacity(0.4)),
-
+          Container(color: Colors.black.withValues(alpha: 0.4)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
@@ -79,8 +81,10 @@ class _herosectionState extends State<herosection> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5A3182),
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 20),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
                   ),
                   child: const Text("View Products →"),
                 ),

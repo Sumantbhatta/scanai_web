@@ -125,128 +125,126 @@ class ProductsSection extends StatelessWidget {
 
   // PRODUCT CARD
   Widget _productCard(BuildContext context, _ProductModel product) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.center, // ✅ CENTER EVERYTHING
-    children: [
-
-      // 🔥 TOP HALF → IMAGE
-      Expanded(
-        flex: 5,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: SizedBox(
-            width: double.infinity,
-            child: Image.asset(
-              product.image,
-              fit: BoxFit.contain,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center, // ✅ CENTER EVERYTHING
+      children: [
+        // 🔥 TOP HALF → IMAGE
+        Expanded(
+          flex: 5,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              width: double.infinity,
+              child: Image.asset(
+                product.image,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ),
-      ),
 
-      // 🔥 BOTTOM HALF → CONTENT
-      Expanded(
-        flex: 5,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center, // ✅ CENTER
-            children: [
-
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center, // ✅ CENTER
-                children: [
-                  // ICON
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: _accent,
-                      borderRadius: BorderRadius.circular(8),
+        // 🔥 BOTTOM HALF → CONTENT
+        Expanded(
+          flex: 5,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center, // ✅ CENTER
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center, // ✅ CENTER
+                  children: [
+                    // ICON
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: _accent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(product.icon, color: Colors.white, size: 20),
                     ),
-                    child: Icon(product.icon, color: Colors.white, size: 20),
-                  ),
 
-                  const SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
-                  // NAME
-                  Text(
-                    product.name,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: _primary,
-                    ),
-                  ),
-
-                  // TAGLINE
-                  Text(
-                    product.tagline,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: _accent,
-                      fontSize: 12,
-                    ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  // DESCRIPTION
-                  Text(
-                    product.description,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  // ✅ FEATURES CENTERED
-                  ...product.features.take(2).map(
-                    (f) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: Text(
-                        "• ${f['title']}",
-                        textAlign: TextAlign.center, // ✅ CENTER BULLETS
-                        style: const TextStyle(fontSize: 12),
+                    // NAME
+                    Text(
+                      product.name,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: _primary,
                       ),
                     ),
-                  ),
-                ],
-              ),
 
-              // BUTTON
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ProductDetailPage(product: product),
+                    // TAGLINE
+                    Text(
+                      product.tagline,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: _accent,
+                        fontSize: 12,
                       ),
-                    );
-                  },
-                  child: Text(product.cta),
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    // DESCRIPTION
+                    Text(
+                      product.description,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 13),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    // ✅ FEATURES CENTERED
+                    ...product.features.take(2).map(
+                          (f) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2),
+                            child: Text(
+                              "• ${f['title']}",
+                              textAlign: TextAlign.center, // ✅ CENTER BULLETS
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        ),
+                  ],
                 ),
-              ),
-            ],
+
+                // BUTTON
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProductDetailPage(product: product),
+                        ),
+                      );
+                    },
+                    child: Text(product.cta),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    ],
-  );
-}
+      ],
+    );
+  }
 
   // CTA
   Widget _ctaPanel() {
     return Container(
       padding: const EdgeInsets.all(24),
-      color: _primary.withOpacity(0.1),
+      color: Colors.black.withValues(alpha: 0.5),
       child: const Text(
         "Upgrade your healthcare setup with ScanAI",
         textAlign: TextAlign.center,
@@ -272,8 +270,7 @@ class ProductsSection extends StatelessWidget {
       cta: 'Buy Now',
       image: 'assets/p2.jpeg',
     ),
-    _ProductModel
-    (
+    _ProductModel(
       icon: Icons.monitor_heart,
       name: 'ECG Lite',
       tagline: 'Portable Clinical Monitoring',
@@ -375,7 +372,7 @@ class _HoverProductCardState extends State<_HoverProductCard> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         transform: isHover
-            ? (Matrix4.identity()..translate(0, -6))
+            ? Matrix4.translationValues(0.0, -8.0, 0.0)
             : Matrix4.identity(),
         child: Card(
           elevation: isHover ? 12 : 4,
