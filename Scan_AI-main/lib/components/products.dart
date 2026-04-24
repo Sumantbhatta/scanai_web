@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:scan_ai/utils/navigation.dart';
+import 'package:scan_ai/pages/product_detail_page.dart';
 
-class productssection extends StatelessWidget {
-  const productssection({super.key});
+class ProductsSection extends StatelessWidget {
+  const ProductsSection({super.key});
 
   static const Color _primary = Color(0xFF5A3182);
-  static const Color _secondary = Color(0xFF5A3283);
   static const Color _accent = Color(0xFFE063A3);
   static const Color _softAccent = Color(0xFFC659A5);
 
@@ -18,12 +17,12 @@ class productssection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _heroSection(context),
+          _heroSection(),
           const SizedBox(height: 40),
           _sectionTitle(
             title: 'ECG Devices for Everyday Health Monitoring',
             description:
-                'Monitor your heart health anytime, anywhere with ScanAI portable ECG devices. Designed for individuals and small clinics, our devices provide accurate readings and seamless integration with the ScanAI app.',
+                'Monitor your heart health anytime, anywhere with ScanAI portable ECG devices.',
             icon: Icons.favorite,
           ),
           const SizedBox(height: 20),
@@ -32,91 +31,34 @@ class productssection extends StatelessWidget {
           _sectionTitle(
             title: 'Portable X-Ray Systems for Clinics and Professionals',
             description:
-                'Empower your clinic with high-quality imaging solutions designed for mobility, efficiency, and accuracy.',
+                'Empower your clinic with high-quality imaging solutions.',
             icon: Icons.medical_services,
           ),
           const SizedBox(height: 20),
           _productGrid(context, _xrayProducts),
           const SizedBox(height: 46),
-          _ctaPanel(context),
-          const SizedBox(height: 18),
-          Center(
-            child: Text(
-              'ScanAI is building the future of accessible healthcare by combining AI-powered diagnostics with smart medical devices.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.grey.shade700,
-                fontSize: 14,
-                height: 1.6,
-              ),
-            ),
-          ),
+          _ctaPanel(),
         ],
       ),
     );
   }
 
-  Widget _heroSection(BuildContext context) {
+  // HERO
+  Widget _heroSection() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 34),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [_primary.withOpacity(0.98), _softAccent.withOpacity(0.95)],
-        ),
+        gradient: LinearGradient(colors: [_primary, _softAccent]),
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: _primary.withOpacity(0.16),
-            blurRadius: 24,
-            offset: const Offset(0, 12),
-          ),
-        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Smart Medical Devices Powered by AI',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 34,
-              fontWeight: FontWeight.w700,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            'ScanAI brings advanced diagnostic tools to your fingertips from personal heart monitoring to professional imaging systems.',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 16,
-              height: 1.6,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              _solidButton(
-                context,
-                label: 'Explore Devices',
-                actionLabel: 'products',
-              ),
-              _outlineButton(
-                context,
-                label: 'Contact Sales',
-                actionLabel: 'contact us',
-              ),
-            ],
-          )
-        ],
+      child: const Text(
+        'Smart Medical Devices Powered by AI',
+        style: TextStyle(color: Colors.white, fontSize: 28),
       ),
     );
   }
 
+  // TITLE
   Widget _sectionTitle({
     required String title,
     required String description,
@@ -127,434 +69,276 @@ class productssection extends StatelessWidget {
       children: [
         Row(
           children: [
-            Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                color: _accent.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(icon, size: 18, color: _accent),
-            ),
-            const SizedBox(width: 10),
+            Icon(icon, color: _accent),
+            const SizedBox(width: 8),
             const Text(
               'PRODUCT CATALOG',
-              style: TextStyle(
-                color: _accent,
-                letterSpacing: 1.2,
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
-              ),
+              style: TextStyle(color: _accent),
             ),
           ],
-        ),
-        const SizedBox(height: 12),
-        Text(
-          title,
-          style: const TextStyle(
-            color: _primary,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            height: 1.2,
-          ),
         ),
         const SizedBox(height: 10),
         Text(
-          description,
-          style: TextStyle(
-            color: Colors.grey.shade700,
-            fontSize: 15,
-            height: 1.6,
+          title,
+          style: const TextStyle(
+              fontSize: 24, fontWeight: FontWeight.bold, color: _primary),
+        ),
+        const SizedBox(height: 4),
+        Text(description),
+      ],
+    );
+  }
+
+  // GRID
+  Widget _productGrid(BuildContext context, List<_ProductModel> products) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    int crossAxisCount = 1;
+
+    if (screenWidth > 1200) {
+      crossAxisCount = 3; // desktop
+    } else if (screenWidth > 800) {
+      crossAxisCount = 2; // tablet
+    } else {
+      crossAxisCount = 1; // mobile
+    }
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: products.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCount,
+        crossAxisSpacing: 24,
+        mainAxisSpacing: 24,
+        childAspectRatio: 0.9, // 🔥 controls card height
+      ),
+      itemBuilder: (context, index) {
+        final p = products[index];
+
+        return _HoverProductCard(
+          child: _productCard(context, p),
+        );
+      },
+    );
+  }
+
+  // PRODUCT CARD
+  Widget _productCard(BuildContext context, _ProductModel product) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center, // ✅ CENTER EVERYTHING
+      children: [
+        // 🔥 TOP HALF → IMAGE
+        Expanded(
+          flex: 5,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              width: double.infinity,
+              child: Image.asset(
+                product.image,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+        ),
+
+        // 🔥 BOTTOM HALF → CONTENT
+        Expanded(
+          flex: 5,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center, // ✅ CENTER
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center, // ✅ CENTER
+                  children: [
+                    // ICON
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: _accent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(product.icon, color: Colors.white, size: 20),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    // NAME
+                    Text(
+                      product.name,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: _primary,
+                      ),
+                    ),
+
+                    // TAGLINE
+                    Text(
+                      product.tagline,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: _accent,
+                        fontSize: 12,
+                      ),
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    // DESCRIPTION
+                    Text(
+                      product.description,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 13),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    // ✅ FEATURES CENTERED
+                    ...product.features.take(2).map(
+                          (f) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2),
+                            child: Text(
+                              "• ${f['title']}",
+                              textAlign: TextAlign.center, // ✅ CENTER BULLETS
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        ),
+                  ],
+                ),
+
+                // BUTTON
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProductDetailPage(product: product),
+                        ),
+                      );
+                    },
+                    child: Text(product.cta),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _productGrid(BuildContext context, List<_ProductModel> products) {
-    return Column(
-      children: products
-          .map(
-            (product) => Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 14),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: _primary.withOpacity(0.12)),
-                ),
-              ),
-              child: _productCard(context, product),
-            ),
-          )
-          .toList(),
-    );
-  }
-
-  Widget _productCard(BuildContext context, _ProductModel product) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final bool isMobile = constraints.maxWidth < 860;
-        final content = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 42,
-              height: 42,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    _secondary.withOpacity(0.85),
-                    _accent.withOpacity(0.85)
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(product.icon, color: Colors.white, size: 22),
-            ),
-            const SizedBox(height: 14),
-            Text(
-              product.name,
-              style: const TextStyle(
-                color: _primary,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                height: 1.2,
-              ),
-            ),
-            if (isMobile) ...[
-              const SizedBox(height: 6),
-              Text(
-                product.tagline,
-                style: const TextStyle(
-                  color: _accent,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-            const SizedBox(height: 10),
-            Text(
-              product.description,
-              style: TextStyle(
-                color: Colors.grey.shade700,
-                fontSize: 14,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 12),
-            ...product.features
-                .map(
-                  (feature) => Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.check_circle,
-                            size: 16, color: _accent),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            feature,
-                            style: const TextStyle(
-                              color: _primary,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                )
-                .toList(),
-            if (product.useCases.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              const Text(
-                'Use Cases',
-                style: TextStyle(
-                  color: _primary,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 13,
-                ),
-              ),
-              const SizedBox(height: 6),
-              ...product.useCases
-                  .map(
-                    (useCase) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        '- $useCase',
-                        style: TextStyle(
-                          color: Colors.grey.shade700,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ],
-            const SizedBox(height: 12),
-            _solidButton(
-              context,
-              label: product.cta,
-              compact: true,
-              actionLabel: _routeLabelFromCTA(product.cta),
-            ),
-          ],
-        );
-
-        if (isMobile) {
-          return content;
-        }
-
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(flex: 7, child: content),
-            const SizedBox(width: 24),
-            Expanded(
-              flex: 3,
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Text(
-                  product.tagline,
-                  textAlign: TextAlign.right,
-                  style: const TextStyle(
-                    color: _accent,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _ctaPanel(BuildContext context) {
+  // CTA
+  Widget _ctaPanel() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 34),
-      decoration: BoxDecoration(
-        color: _primary.withOpacity(0.06),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text(
-            'Ready to Upgrade Your Healthcare Setup?',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: _primary,
-              fontSize: 30,
-              fontWeight: FontWeight.w700,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Whether you are monitoring your health at home or setting up a modern clinic, ScanAI has the right solution for you.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.grey.shade700,
-              fontSize: 15,
-              height: 1.6,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            alignment: WrapAlignment.center,
-            children: [
-              _solidButton(
-                context,
-                label: 'Explore App',
-                actionLabel: 'download',
-              ),
-              _outlineButton(
-                context,
-                label: 'Contact Sales',
-                actionLabel: 'contact us',
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _solidButton(
-    BuildContext context, {
-    required String label,
-    required String actionLabel,
-    bool compact = false,
-  }) {
-    return ElevatedButton(
-      onPressed: () {
-        handleNavbarNavigation(context, actionLabel);
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: _accent,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        padding: EdgeInsets.symmetric(
-          horizontal: compact ? 14 : 22,
-          vertical: compact ? 10 : 13,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(999),
-        ),
-      ),
-      child: Text(
-        label,
+      padding: const EdgeInsets.all(24),
+      color: Colors.black.withValues(alpha: 0.5),
+      child: const Text(
+        "Upgrade your healthcare setup with ScanAI",
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: compact ? 12 : 14,
-          fontWeight: FontWeight.w600,
-        ),
       ),
     );
   }
 
-  Widget _outlineButton(
-    BuildContext context, {
-    required String label,
-    required String actionLabel,
-  }) {
-    return OutlinedButton(
-      onPressed: () {
-        handleNavbarNavigation(context, actionLabel);
-      },
-      style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: Colors.white, width: 1.1),
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 13),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(999),
-        ),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  String _routeLabelFromCTA(String ctaText) {
-    final lower = ctaText.toLowerCase();
-    if (lower.contains('contact') || lower.contains('request')) {
-      return 'contact us';
-    }
-    if (lower.contains('buy now')) {
-      return 'download';
-    }
-    return 'products';
-  }
+  // ================= DATA =================
 
   static final List<_ProductModel> _ecgProducts = [
     _ProductModel(
-      icon: Icons.monitor_heart,
-      name: 'ScanAI ECG Lite',
-      tagline: 'Simple. Portable. Reliable.',
-      description:
-          'A compact ECG device designed for everyday users who want quick and easy heart monitoring at home.',
-      features: const [
-        'Lightweight and portable',
-        'Real-time heart monitoring',
-        'Mobile app connectivity',
-        'AI-based analysis support',
+      icon: Icons.favorite,
+      name: 'ECG Plus',
+      tagline: 'Smart Home Monitoring',
+      description: 'Advanced ECG tracking system.',
+      features: [
+        {"title": "Clinical Accuracy", "desc": "99.7% accuracy."},
+        {"title": "Sharp Sensitivity", "desc": "Detects irregularities."},
+        {"title": "No Battery Needed", "desc": "Works offline."},
+        {"title": "Easy to Use", "desc": "Simple UI."},
       ],
-      useCases: const [
-        'Daily health tracking',
-        'Early detection of irregularities',
-      ],
-      cta: 'Buy Now / Coming Soon',
+      useCases: [],
+      cta: 'Buy Now',
+      image: 'assets/p2.jpeg',
     ),
     _ProductModel(
-      icon: Icons.favorite_border,
-      name: 'ScanAI ECG Plus',
-      tagline: 'Smart Monitoring for Modern Health',
-      description:
-          'An advanced portable ECG system with enhanced accuracy and continuous monitoring capabilities.',
-      features: const [
-        'Continuous ECG tracking',
-        'Smart alerts and insights',
-        'Seamless app integration',
-        'Designed for home and semi-clinical use',
+      icon: Icons.monitor_heart,
+      name: 'ECG Lite',
+      tagline: 'Portable Clinical Monitoring',
+      description: 'Compact ECG monitoring device.',
+      features: [
+        {"title": "Portable", "desc": "Lightweight"},
+        {"title": "Real-time Monitoring", "desc": "Instant ECG"},
       ],
-      useCases: const [],
-      cta: 'Buy Now / Coming Soon',
+      useCases: [],
+      cta: 'Buy Now',
+      image: 'assets/p1.jpeg',
     ),
     _ProductModel(
       icon: Icons.health_and_safety,
-      name: 'ScanAI ECG Pro',
-      tagline: 'Clinical-Grade Precision',
-      description:
-          'A professional-grade ECG device suitable for clinics and advanced diagnostics.',
-      features: const [
-        '12-channel ECG',
-        'High precision readings',
-        'AI-assisted diagnostics',
-        'Clinical-grade performance',
+      name: 'ECG Pro',
+      tagline: 'Hospital Grade',
+      description: 'Advanced 12-lead ECG system.',
+      features: [
+        {"title": "12 Lead ECG", "desc": "Full analysis"},
+        {"title": "Smart Integration", "desc": "Mobile apps"},
       ],
-      useCases: const [],
-      cta: 'Buy Now / Contact Sales',
+      useCases: [],
+      cta: 'Buy Now',
+      image: 'assets/p3.jpeg',
     ),
   ];
 
   static final List<_ProductModel> _xrayProducts = [
     _ProductModel(
       icon: Icons.mobile_friendly,
-      name: 'ScanAI X-Ray Mobile',
-      tagline: 'Mobility Meets Diagnostics',
-      description:
-          'A compact and portable X-ray system designed for clinics, home visits, and mobile diagnostics.',
-      features: const [
-        'Easy to transport',
-        'Quick imaging setup',
-        'Ideal for small clinics',
-        'Cost-effective solution',
+      name: 'Mobile Portable X-Ray',
+      tagline: 'Portable Imaging',
+      description: 'Mobile X-ray system.',
+      features: [
+        {"title": "Portable", "desc": "Easy movement"},
+        {"title": "Fast Imaging", "desc": "Quick diagnosis"},
       ],
-      useCases: const [],
-      cta: 'Request Demo',
+      useCases: [],
+      cta: 'Buy Now',
+      image: 'assets/mobile_portable_xray.jpeg',
     ),
     _ProductModel(
       icon: Icons.image_search,
-      name: 'ScanAI X-Ray Pro',
-      tagline: 'High-Quality Imaging for Modern Clinics',
-      description:
-          'A high-frequency digital X-ray system delivering clear and reliable imaging results.',
-      features: const [
-        'High-resolution imaging',
-        'DICOM compatibility',
-        'Optimized for clinical use',
-        'Robust performance',
+      name: 'X-Ray Pro',
+      tagline: 'High Quality Imaging',
+      description: 'Advanced digital X-ray system.',
+      features: [
+        {"title": "HD Imaging", "desc": "Clear images"},
+        {"title": "DICOM", "desc": "Hospital integration"},
       ],
-      useCases: const [],
-      cta: 'Contact Sales',
-    ),
-    _ProductModel(
-      icon: Icons.precision_manufacturing,
-      name: 'ScanAI X-Ray Advanced',
-      tagline: 'Advanced Imaging, Real-Time Insights',
-      description:
-          'A premium DRF system that combines fluoroscopy and X-ray for real-time diagnostics.',
-      features: const [
-        'Real-time imaging (fluoroscopy)',
-        'Advanced diagnostics',
-        'Integrated software support',
-        'Ideal for hospitals',
-      ],
-      useCases: const [],
-      cta: 'Request Demo',
+      useCases: [],
+      cta: 'Buy Now',
+      image: 'assets/xray_handheld.jpeg',
     ),
   ];
 }
 
+// MODEL
 class _ProductModel {
+  final IconData icon;
+  final String name;
+  final String tagline;
+  final String description;
+  final List<Map<String, String>> features;
+  final List<String> useCases;
+  final String cta;
+  final String image;
+
   const _ProductModel({
     required this.icon,
     required this.name,
@@ -563,13 +347,44 @@ class _ProductModel {
     required this.features,
     required this.useCases,
     required this.cta,
+    required this.image,
   });
+}
 
-  final IconData icon;
-  final String name;
-  final String tagline;
-  final String description;
-  final List<String> features;
-  final List<String> useCases;
-  final String cta;
+// HOVER CARD
+class _HoverProductCard extends StatefulWidget {
+  final Widget child;
+
+  const _HoverProductCard({required this.child, super.key});
+
+  @override
+  State<_HoverProductCard> createState() => _HoverProductCardState();
+}
+
+class _HoverProductCardState extends State<_HoverProductCard> {
+  bool isHover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHover = true),
+      onExit: (_) => setState(() => isHover = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        transform: isHover
+            ? Matrix4.translationValues(0.0, -8.0, 0.0)
+            : Matrix4.identity(),
+        child: Card(
+          elevation: isHover ? 12 : 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: widget.child,
+          ),
+        ),
+      ),
+    );
+  }
 }

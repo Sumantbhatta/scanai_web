@@ -10,13 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  video_player: ^2.8.1
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^6.0.0
 
 flutter:
@@ -29,3 +28,9 @@ flutter:
     - assets/service1.jpg
     - assets/service2.jpg
     - assets/download.jpg
+    - assets/scan_ai_video.mp4
+    - assets/xray_handheld.jpeg
+    - assets/mobile_portable_xray.jpeg
+    - assets/p1.jpeg
+    - assets/p2.jpeg
+    - assets/p3.jpeg

@@ -39,6 +39,7 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // The MainPage acts as the entry point for the '/' route
     return const Scaffold(body: HomePage());
   }
 }
