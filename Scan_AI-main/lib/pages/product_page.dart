@@ -14,7 +14,7 @@ class ProductPage extends StatelessWidget {
         child: Column(
           children: [
             header(onNavTap: (item) => handleNavbarNavigation(context, item)),
-            const productssection(),
+            ProductsSection(),
             const footer(),
           ],
         ),

@@ -35,7 +35,7 @@ class _herosectionState extends State<herosection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
+      height: 600,
       width: double.infinity,
       clipBehavior: Clip.hardEdge,
       decoration: const BoxDecoration(color: Color(0xFF5A3182)),

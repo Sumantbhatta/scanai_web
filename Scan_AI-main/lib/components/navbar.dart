@@ -32,7 +32,7 @@ class navbar extends StatelessWidget {
         onItemTap(text);
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Text(
           text,
           style: const TextStyle(
